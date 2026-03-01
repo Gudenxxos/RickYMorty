@@ -57,6 +57,7 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 
+    implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("androidx.compose.ui:ui-text-google-fonts")
     // Ktor
     val ktor_version = "3.4.0"
