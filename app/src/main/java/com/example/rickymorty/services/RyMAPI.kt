@@ -38,10 +38,9 @@ class RyMAPI {
         }
     }
 
-    suspend fun getPersonajes(): List<PersonajeInfo> {
-        val response: JsonObject = client.get("?page=21").body()
+    suspend fun getPersonajes(page: Int = 1): List<PersonajeInfo> {
+        val response: JsonObject = client.get("?page=$page").body()
         val resultsElement = response["results"] ?: return emptyList()
         return JsonConfig.decodeFromJsonElement<List<PersonajeInfo>>(resultsElement)
     }
-
 }
