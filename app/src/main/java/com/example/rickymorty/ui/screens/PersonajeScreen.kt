@@ -28,7 +28,22 @@ import com.example.rickymorty.ui.theme.primaryLight
 import com.example.rickymorty.ui.theme.onPrimaryLight
 import kotlin.math.cos
 import kotlin.math.sin
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
+import androidx.compose.ui.platform.LocalContext
 
+
+
+
+fun dialPhoneNumber(context: android.content.Context, phoneNumber: String) {
+    val intent = Intent(Intent.ACTION_DIAL).apply {
+        data = Uri.parse("tel:$phoneNumber")
+    }
+    if (intent.resolveActivity(context.packageManager) != null) {
+        context.startActivity(intent)
+    }
+}
 @Composable
 fun PersonajeScreen(
     personaje: PersonajeInfo
@@ -71,7 +86,7 @@ fun PersonajeScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // 🔥 FONDO CIRCULAR (Portal)
+        // FONDO CIRCULAR (Portal)
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -79,7 +94,7 @@ fun PersonajeScreen(
                 .background(vortexBrush)
         )
 
-        // 🤍 Contenedor principal
+        // Contenedor principal
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,7 +103,8 @@ fun PersonajeScreen(
                 .background(MaterialTheme.colorScheme.surface)
         )
 
-        // 📷 Imagen de perfil con MARCO CIRCULAR
+        val context = LocalContext.current
+        // Imagen de perfil con MARCO CIRCULAR
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
@@ -96,8 +112,9 @@ fun PersonajeScreen(
                 .size(175.dp)
                 .shadow(30.dp, CircleShape)
                 .background(vortexBrush, CircleShape)
-                .padding(7.dp),
-            contentAlignment = Alignment.Center
+                .padding(7.dp)
+                .clickable { dialPhoneNumber(context, personaje.id.toString()) },
+            contentAlignment = Alignment.Center,
         ) {
             AsyncImage(
                 model = personaje.image,
@@ -145,25 +162,7 @@ fun PersonajeScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // 📞 BOTÓN QUE USA TUS COLORES VERDES DIRECTAMENTE
-            Button(
-                onClick = { /* Acción */ },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(54.dp)
-                    .padding(horizontal = 16.dp),
-                shape = CircleShape,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = primaryLight, // Forzamos tu verde del Color.kt
-                    contentColor = onPrimaryLight   // Forzamos tu blanco
-                ),
-                elevation = ButtonDefaults.buttonElevation(defaultElevation = 6.dp)
-            ) {
-                Text(
-                    "LLAMAR",
-                    style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.ExtraBold)
-                )
-            }
+            // BOTÓN QUE USA TUS COLORES VERDES DIRECTAMENTE
 
             Spacer(modifier = Modifier.height(32.dp))
 
@@ -193,7 +192,7 @@ fun PersonajeScreen(
         }
     }
 }
-
+/*
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PersonajeScreenPreview() {
@@ -210,4 +209,4 @@ fun PersonajeScreenPreview() {
             type = null
         )
     )
-}
+}*/

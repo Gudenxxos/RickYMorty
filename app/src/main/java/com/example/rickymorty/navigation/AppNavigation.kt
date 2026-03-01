@@ -11,15 +11,15 @@ import androidx.navigation3.ui.NavDisplay
 import com.example.rickymorty.ui.screens.PersonajesListScreen
 import com.example.rickymorty.viewmodels.PersonajeViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
-import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import com.example.rickymorty.ui.screens.PersonajeScreen
+
 
 
 
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
-    val backStack = rememberNavBackStack(AppRoutes.PersonajesList); //AGREGAAAAAAAR
+    val backStack = rememberNavBackStack(AppRoutes.PersonajesList)
     val personajeViewModel: PersonajeViewModel = viewModel()
 
 
@@ -54,7 +54,7 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                 }
 
                 is AppRoutes.PersonajeDetail -> NavEntry(key){
-                    //personajeScreen(personaje = key.personaje)
+                    PersonajeScreen(personaje = key.personaje)
                 }
                 else -> {
                     error("Unknown route: $key")

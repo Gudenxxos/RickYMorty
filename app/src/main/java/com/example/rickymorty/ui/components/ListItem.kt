@@ -12,24 +12,19 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import coil.compose.AsyncImage
-import com.example.rickymorty.data.PersonajeInfo
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rickymorty.ui.theme.RickYMortyTheme
+import coil.compose.AsyncImage
+import com.example.rickymorty.data.PersonajeInfo
 
 @Composable
 fun ListItem(
@@ -41,14 +36,12 @@ fun ListItem(
             .fillMaxWidth()
             .clickable { onClick() }
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
             // Imagen circular
             AsyncImage(
                 model = personaje.image,
@@ -82,7 +75,7 @@ fun ListItem(
                 )
             }
 
-            // Icono play
+            // Icono de flecha
             Icon(
                 imageVector = Icons.Default.PlayArrow,
                 contentDescription = "Go to detail",
@@ -91,35 +84,10 @@ fun ListItem(
             )
         }
 
-        HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
-
+        HorizontalDivider(
+            modifier = Modifier.padding(horizontal = 16.dp),
+            thickness = 0.5.dp,
+            color = MaterialTheme.colorScheme.outlineVariant
+        )
     }
 }
-/*
-@Preview(showBackground = true)
-@Composable
-fun ListItemPreview() {
-    RickYMortyTheme(
-        darkTheme = false,
-        dynamicColor = false
-    ) {
-        Surface(
-            color = MaterialTheme.colorScheme.background
-        ) {
-
-            ListItem(
-                personaje = PersonajeInfo(
-                    id = 1,
-                    name = "Rick Sanchez",
-                    status = "Alive",
-                    species = "Human",
-                    gender = "Male",
-                    origin = "Earth (C-137)",
-                    location = "Citadel of Ricks",
-                    image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-                    type = null
-                )
-            )
-        }
-    }
-}*/
