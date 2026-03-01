@@ -21,14 +21,12 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            RickYMortyTheme {
+            RickYMortyTheme (dynamicColor = false){
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Box(Modifier.padding(innerPadding)) {
-                        AppNavigation(
-                            Modifier
-                                .padding(innerPadding)
-                        )
-                    }
+                    AppNavigation(
+                        Modifier
+                            .padding(innerPadding)
+                    )
                 }
             }
         }

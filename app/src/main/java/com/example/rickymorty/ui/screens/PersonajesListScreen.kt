@@ -67,7 +67,6 @@ fun PersonajesListScreen(onPersonajeClick: (PersonajeInfo) -> Unit = {}) {
         }
         items(items = personajesList, key = { it.id }) { pers ->
             ListItem(personaje = pers, onClick = { onPersonajeClick(pers) })
-            HorizontalDivider()
         }
     }
 }
