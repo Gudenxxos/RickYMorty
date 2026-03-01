@@ -7,15 +7,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.runtime.rememberNavBackStack
-import androidx.navigation3.scene.rememberSceneState
 import androidx.navigation3.ui.NavDisplay
-import com.example.rickymorty.navigation.ChListRoute
 import com.example.rickymorty.ui.screens.PersonajesListScreen
+import com.example.rickymorty.viewmodels.PersonajeViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+
+
 
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
-    val backStack = rememberNavBackStack(RouteListScreen); //AGREGAAAAAAAR
+    val backStack = rememberNavBackStack(AppRoutes.PersonajesList); //AGREGAAAAAAAR
+    val personajeViewModel: PersonajeViewModel = viewModel()
+
+
+
 
     NavDisplay(
         modifier = modifier,
@@ -36,17 +44,18 @@ fun AppNavigation(modifier: Modifier = Modifier) {
 
         entryProvider = { key ->
             when (key) {
-                is RouteListScreen -> NavEntry(key){
-                    PersonajesListScreen(onPersonajeClick = { personaje ->
-                        /*backStack.add(
-                                ChListRoute(
-                                    character = personaje
-                                )
-                            )*/
-                        })
+                is AppRoutes.PersonajesList -> NavEntry(key){
+                    PersonajesListScreen(
+                        viewModel = personajeViewModel,
+                        navToPersonajeDetail = { personaje ->
+                            backStack.add(AppRoutes.PersonajeDetail(personaje))
+                        }
+                        )
                 }
 
-
+                is AppRoutes.PersonajeDetail -> NavEntry(key){
+                    //personajeScreen(personaje = key.personaje)
+                }
                 else -> {
                     error("Unknown route: $key")
                 }

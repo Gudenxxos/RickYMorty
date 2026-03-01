@@ -71,4 +71,5 @@ dependencies {
     val navigation_version = "1.1.0-alpha04"
     implementation("androidx.navigation3:navigation3-runtime:${navigation_version}")
     implementation("androidx.navigation3:navigation3-ui:${navigation_version}")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-navigation3:${navigation_version}")
 }
