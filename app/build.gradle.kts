@@ -66,4 +66,9 @@ dependencies {
     implementation("io.ktor:ktor-client-content-negotiation:$ktor_version")
     implementation("io.ktor:ktor-client-logging:$ktor_version")
     implementation("io.ktor:ktor-serialization-kotlinx-json:$ktor_version")
+
+    // Navigation3
+    val navigation_version = "1.1.0-alpha04"
+    implementation("androidx.navigation3:navigation3-runtime:${navigation_version}")
+    implementation("androidx.navigation3:navigation3-ui:${navigation_version}")
 }

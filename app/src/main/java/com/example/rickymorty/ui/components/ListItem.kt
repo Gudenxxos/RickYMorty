@@ -75,7 +75,7 @@ fun ListItem(
                 Spacer(modifier = Modifier.height(4.dp))
 
                 Text(
-                    text = "${personaje.species} - ${personaje.location}",
+                    text = "${personaje.species} - ${personaje.location.name}",
                     style = MaterialTheme.typography.bodyMedium,
                     fontWeight = FontWeight.Medium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
@@ -95,7 +95,7 @@ fun ListItem(
 
     }
 }
-
+/*
 @Preview(showBackground = true)
 @Composable
 fun ListItemPreview() {
@@ -106,6 +106,7 @@ fun ListItemPreview() {
         Surface(
             color = MaterialTheme.colorScheme.background
         ) {
+
             ListItem(
                 personaje = PersonajeInfo(
                     id = 1,
@@ -121,4 +122,4 @@ fun ListItemPreview() {
             )
         }
     }
-}
+}*/
