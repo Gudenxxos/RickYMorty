@@ -8,30 +8,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.rickymorty.ui.theme.primaryLight
-import com.example.rickymorty.ui.theme.primaryContainerLight
+import com.example.rickymorty.ui.theme.RickYMortyTheme
 
 @Composable
-fun RowScope.InfoCard(
+fun InfoCard(
+    modifier: Modifier = Modifier,
     label: String,
     value: String
 ) {
     Column(
-        modifier = Modifier
-            .weight(1f)
+        modifier = modifier
             .padding(horizontal = 4.dp)
             .clip(RoundedCornerShape(16.dp))
-            .background(primaryContainerLight.copy(alpha = 0.2f))
+            .background(MaterialTheme.colorScheme.surfaceContainer.copy(alpha = 0.75f))
             .padding(16.dp)
     ) {
-
         Text(
             text = label.uppercase(),
             style = MaterialTheme.typography.labelSmall,
-            color = primaryLight,
+            color = MaterialTheme.colorScheme.onPrimaryContainer,
             fontWeight = FontWeight.Bold
         )
 
@@ -45,3 +43,20 @@ fun RowScope.InfoCard(
         )
     }
 }
+
+@Preview(showBackground = true)
+@Composable
+fun InfoCardPreviewLight(){
+    RickYMortyTheme {
+        InfoCard(label = "Especie", value = "Humano")
+    }
+}
+
+@Preview(showBackground = true, uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun InfoCardPreviewDark(){
+    RickYMortyTheme {
+        InfoCard(label = "Especie", value = "Humano")
+    }
+}
+

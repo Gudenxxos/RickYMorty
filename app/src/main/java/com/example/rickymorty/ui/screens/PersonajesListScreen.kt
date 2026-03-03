@@ -38,6 +38,7 @@ fun PersonajesListScreen(
     navToPersonajeDetail: (PersonajeInfo) -> Unit = {},
     viewModel: PersonajeViewModel
 ) {
+
     val personajeUiState by viewModel.uiState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
@@ -47,6 +48,8 @@ fun PersonajesListScreen(
     }
 
     Box(modifier = Modifier.fillMaxSize()) {
+
+        // Animación de carga
         AnimatedVisibility(
             visible = personajeUiState.personajesList.isEmpty() && personajeUiState.isLoading,
             enter = fadeIn(),
@@ -57,6 +60,7 @@ fun PersonajesListScreen(
             }
         }
 
+        // Lista de personajes que se actualizan con PullToRefresh
         PullToRefreshBox(
             isRefreshing = personajeUiState.isRefreshing,
             onRefresh = { viewModel.refresh() },

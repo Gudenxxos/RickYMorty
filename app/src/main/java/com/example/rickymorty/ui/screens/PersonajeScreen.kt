@@ -1,6 +1,11 @@
 package com.example.rickymorty.ui.screens
 
-import androidx.compose.animation.core.*
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -18,83 +23,71 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.rickymorty.data.NameContainer
 import com.example.rickymorty.data.PersonajeInfo
 import com.example.rickymorty.ui.components.InfoCard
-import com.example.rickymorty.ui.theme.primaryLight
-import com.example.rickymorty.ui.theme.onPrimaryLight
-import kotlin.math.cos
-import kotlin.math.sin
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.ui.platform.LocalContext
-
-
-
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.net.toUri
+import com.example.rickymorty.data.NameContainer
+import com.example.rickymorty.ui.theme.RickYMortyTheme
+import com.example.rickymorty.R
 
 fun dialPhoneNumber(context: android.content.Context, phoneNumber: String) {
     val intent = Intent(Intent.ACTION_DIAL).apply {
-        data = Uri.parse("tel:$phoneNumber")
+        data = "tel:$phoneNumber".toUri()
     }
     if (intent.resolveActivity(context.packageManager) != null) {
         context.startActivity(intent)
     }
 }
+
 @Composable
 fun PersonajeScreen(
     personaje: PersonajeInfo
 ) {
-    val infiniteTransition = rememberInfiniteTransition(label = "PortalAnimation")
 
-    // Colores agresivos neón (Radioactividad pura)
-    val PortalBlack = Color(0xFF000F00)
-    val PortalGreen = Color(0xFF00FF00) // Verde neón puro
-    val PortalNeon = Color(0xFFCCFF00)  // Amarillo lima radioactivo
+    val context = LocalContext.current
 
-    // Animación de rotación continua para dar dinamismo
-    val angle by infiniteTransition.animateFloat(
-        initialValue = 0f,
-        targetValue = (Math.PI * 2).toFloat(),
+    // Animación de desplazamiento horizontal
+    val infiniteTransition = rememberInfiniteTransition()
+
+    val desplazamientoBrush by infiniteTransition.animateFloat(
+        initialValue = -400f,
+        targetValue = 400f,
         animationSpec = infiniteRepeatable(
-            animation = tween(6000, easing = LinearEasing),
-            repeatMode = RepeatMode.Restart
-        ),
-        label = "Rotation"
+            animation = tween(durationMillis = 8000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        )
     )
 
-    // Ajuste del centro y radio para el círculo
-    val centerX = 540f // Ajustado para centrar mejor visualmente
-    val centerY = 400f
-    val radius = 750f // Aumentado para que el degradado sea más suave y cubra más espacio
-
-    // Gradiente RADIAL con colorStops para un degradado más sutil
-    val vortexBrush = Brush.radialGradient(
-        0.0f to PortalNeon,
-        0.3f to PortalGreen,
-        1.0f to PortalBlack,
-        center = Offset(
-            x = centerX + cos(angle) * 120f, // Movimiento más amplio para que se note el barrido de color
-            y = centerY + sin(angle) * 120f
-        ),
-        radius = radius
+    val efectoBrush = Brush.linearGradient(
+            colorStops = arrayOf(
+                0.0f to Color(0xFF0D3B12),
+                0.15f to Color(0xFF1B5E20),
+                0.50f to Color(0xFF00E676),
+                0.85f to Color(0xFF1B5E20),
+                1.0f to Color(0xFF0D3B12)
+            ),
+    start = Offset(desplazamientoBrush + 2400f, 0f),
+    end = Offset(desplazamientoBrush, 1400f)
     )
 
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        // FONDO CIRCULAR (Portal)
+        // FONDO
         Box(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(300.dp)
-                .background(vortexBrush)
+                .background(efectoBrush)
         )
-
-        // Contenedor principal
+        // Contenedor redondeado
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -102,23 +95,22 @@ fun PersonajeScreen(
                 .clip(RoundedCornerShape(topStart = 40.dp, topEnd = 40.dp))
                 .background(MaterialTheme.colorScheme.surface)
         )
-
-        val context = LocalContext.current
-        // Imagen de perfil con MARCO CIRCULAR
+        // Imagen con borde animado
         Box(
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .padding(top = 150.dp)
                 .size(175.dp)
-                .shadow(30.dp, CircleShape)
-                .background(vortexBrush, CircleShape)
-                .padding(7.dp)
+                .shadow(25.dp, CircleShape)
+                .background(efectoBrush, CircleShape)
+                .padding(6.dp)
                 .clickable { dialPhoneNumber(context, personaje.id.toString()) },
             contentAlignment = Alignment.Center,
         ) {
             AsyncImage(
                 model = personaje.image,
                 contentDescription = personaje.name,
+                placeholder = painterResource(R.drawable.ic_launcher_background),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxSize()
@@ -126,7 +118,7 @@ fun PersonajeScreen(
             )
         }
 
-        // 📄 Información del personaje
+        // Información
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -134,20 +126,20 @@ fun PersonajeScreen(
                 .padding(top = 340.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            // NOMBRE CON GRADIENTE
+
+            // Nombre con brush
             Text(
                 text = personaje.name.uppercase(),
                 style = TextStyle(
-                    brush = vortexBrush,
+                    brush = efectoBrush,
                     fontSize = MaterialTheme.typography.headlineMedium.fontSize,
-                    fontWeight = FontWeight.ExtraBold,
-                    letterSpacing = androidx.compose.ui.unit.TextUnit.Unspecified
+                    fontWeight = FontWeight.ExtraBold
                 )
             )
 
             Spacer(modifier = Modifier.height(8.dp))
 
-            // Chip de estado
+            // Estado
             Surface(
                 color = if (personaje.status == "Alive") Color(0xFFE8F5E9) else Color(0xFFFBE9E7),
                 shape = CircleShape
@@ -160,15 +152,12 @@ fun PersonajeScreen(
                 )
             }
 
-            Spacer(modifier = Modifier.height(24.dp))
-
-            // BOTÓN QUE USA TUS COLORES VERDES DIRECTAMENTE
-
             Spacer(modifier = Modifier.height(32.dp))
+            HorizontalDivider(
+                modifier = Modifier.padding(bottom = 24.dp),
+                thickness = 0.5.dp
+            )
 
-            HorizontalDivider(modifier = Modifier.padding(bottom = 24.dp), thickness = 0.5.dp)
-
-            // 🟢 Info Grid
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -177,36 +166,52 @@ fun PersonajeScreen(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    InfoCard("Especie", personaje.species)
-                    InfoCard("Género", personaje.gender)
+                    InfoCard(
+                        label = "Especie",
+                        value = personaje.species,
+                        modifier = Modifier.weight(1f)
+                    )
+                    InfoCard(
+                        label = "Género",
+                        value = personaje.gender,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
-                    InfoCard("Origen", personaje.origin.name)
-                    InfoCard("Ubicación", personaje.location.name)
+                    InfoCard(
+                        label = "Origen",
+                        value = personaje.origin.name,
+                        modifier = Modifier.weight(1f)
+                    )
+                    InfoCard(
+                        label = "Ubicación",
+                        value = personaje.location.name,
+                        modifier = Modifier.weight(1f)
+                    )
                 }
             }
         }
     }
 }
-/*
-@Preview(showBackground = true, showSystemUi = true)
+
+@Preview
 @Composable
-fun PersonajeScreenPreview() {
-    PersonajeScreen(
-        personaje = PersonajeInfo(
-            id = 1,
-            name = "Rick Sanchez",
-            status = "Alive",
-            species = "Human",
-            gender = "Male",
-            origin = NameContainer("Earth (C-137)"),
-            location = NameContainer("Citadel of Ricks"),
-            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
-            type = null
-        )
-    )
-}*/
+fun PersonajeScreenPreview(){
+    RickYMortyTheme{
+        PersonajeScreen(
+            PersonajeInfo(
+                1,
+                "Rick Sanchez",
+                "Alive",
+                "Human",
+                "Male",
+                NameContainer("Earth (C-137)"),
+                NameContainer("Citadel of Ricks"),
+                "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+                null
+)) }
+}

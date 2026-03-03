@@ -19,11 +19,9 @@ import com.example.rickymorty.ui.screens.PersonajeScreen
 
 @Composable
 fun AppNavigation(modifier: Modifier = Modifier) {
+
     val backStack = rememberNavBackStack(AppRoutes.PersonajesList)
     val personajeViewModel: PersonajeViewModel = viewModel()
-
-
-
 
     NavDisplay(
         modifier = modifier,
@@ -50,9 +48,8 @@ fun AppNavigation(modifier: Modifier = Modifier) {
                         navToPersonajeDetail = { personaje ->
                             backStack.add(AppRoutes.PersonajeDetail(personaje))
                         }
-                        )
+                    )
                 }
-
                 is AppRoutes.PersonajeDetail -> NavEntry(key){
                     PersonajeScreen(personaje = key.personaje)
                 }

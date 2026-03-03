@@ -20,7 +20,7 @@ import kotlinx.serialization.json.decodeFromJsonElement
 
 class RyMAPI {
 
-    private val JsonConfig = Json {
+    private val jsonConfig = Json {
         explicitNulls = false
         ignoreUnknownKeys = true
     }
@@ -34,13 +34,13 @@ class RyMAPI {
         }
 
         install(ContentNegotiation){
-            json(JsonConfig)
+            json(jsonConfig)
         }
     }
 
     suspend fun getPersonajes(page: Int = 1): List<PersonajeInfo> {
         val response: JsonObject = client.get("?page=$page").body()
-        val resultsElement = response["results"] ?: return emptyList()
-        return JsonConfig.decodeFromJsonElement<List<PersonajeInfo>>(resultsElement)
+        val resultadoPersonajes = response["results"] ?: return emptyList()
+        return jsonConfig.decodeFromJsonElement<List<PersonajeInfo>>(resultadoPersonajes)
     }
 }

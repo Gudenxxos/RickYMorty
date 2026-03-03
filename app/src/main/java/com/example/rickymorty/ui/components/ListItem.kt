@@ -21,10 +21,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.rickymorty.data.NameContainer
 import com.example.rickymorty.data.PersonajeInfo
+import com.example.rickymorty.ui.theme.RickYMortyTheme
+import com.example.rickymorty.R
+
 
 @Composable
 fun ListItem(
@@ -46,6 +52,7 @@ fun ListItem(
             AsyncImage(
                 model = personaje.image,
                 contentDescription = personaje.name,
+                placeholder = painterResource(R.drawable.ic_launcher_background),
                 modifier = Modifier
                     .size(64.dp)
                     .clip(CircleShape),
@@ -54,7 +61,7 @@ fun ListItem(
 
             Spacer(modifier = Modifier.width(16.dp))
 
-            // Textos
+            // Nombre, Género, Especie y Ubicación
             Column(
                 modifier = Modifier.weight(1f)
             ) {
@@ -74,11 +81,10 @@ fun ListItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                 )
             }
-
             // Icono de flecha
             Icon(
                 imageVector = Icons.Default.PlayArrow,
-                contentDescription = "Go to detail",
+                contentDescription = "Ver Detalle del Personaje",
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
                 modifier = Modifier.size(25.dp)
             )
@@ -89,5 +95,24 @@ fun ListItem(
             thickness = 0.5.dp,
             color = MaterialTheme.colorScheme.outlineVariant
         )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun ListItemPreview() {
+    RickYMortyTheme(dynamicColor = false) {
+        ListItem(personaje = PersonajeInfo(
+            id = 1,
+            name = "Rick Sanchez",
+            status = "Alive",
+            species = "Human",
+            gender = "Male",
+            origin = NameContainer("Earth (C-137)"),
+            location = NameContainer("Citadel of Ricks"),
+            image = "https://rickandmortyapi.com/api/character/avatar/1.jpeg",
+            type = null
+        )){
+        }
     }
 }

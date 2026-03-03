@@ -5,8 +5,7 @@ import kotlinx.serialization.Serializable
 import com.example.rickymorty.data.PersonajeInfo
 
 @Serializable
-sealed class AppRoutes() : NavKey {
-    @Serializable data object Home : NavKey
+sealed class AppRoutes : NavKey {
     @Serializable data object PersonajesList : NavKey
     @Serializable data class PersonajeDetail(val personaje: PersonajeInfo) : NavKey
 }

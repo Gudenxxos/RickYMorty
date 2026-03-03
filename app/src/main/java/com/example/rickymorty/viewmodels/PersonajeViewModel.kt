@@ -18,7 +18,7 @@ data class PersonajeUiState(
 )
 
 class PersonajeViewModel(private val ryMAPI: RyMAPI = RyMAPI()) : ViewModel() {
-    // Personaje UI state
+
     private val _uiState = MutableStateFlow(PersonajeUiState())
     val uiState: StateFlow<PersonajeUiState> = _uiState.asStateFlow()
 
@@ -34,12 +34,11 @@ class PersonajeViewModel(private val ryMAPI: RyMAPI = RyMAPI()) : ViewModel() {
                     personajesList = newPersonajes,
                     isLoading = false
                 ) }
-            } catch (e: Exception) {
+            } catch (_:Exception) {
                 _uiState.update { it.copy(isLoading = false) }
             }
         }
     }
-
     fun refresh() {
         viewModelScope.launch {
             _uiState.update { it.copy(isRefreshing = true) }
@@ -52,7 +51,7 @@ class PersonajeViewModel(private val ryMAPI: RyMAPI = RyMAPI()) : ViewModel() {
                     personajesList = newPersonajes,
                     isRefreshing = false
                 ) }
-            } catch (e: Exception) {
+            } catch (_: Exception) {
                 _uiState.update { it.copy(isRefreshing = false) }
             }
         }
